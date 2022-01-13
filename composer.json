@@ -1,0 +1,20 @@
+{
+	"name": "bruno_alleffe/pizzaria",
+	"require": {
+		"php": ">= 7.0"
+	},
+	"authors": [
+		{
+			"name": "Bruno Alleffe Pereira",
+			"email": "bruno16alleffe@gmail.com",
+			"role": "Developer",
+			"homepage": "http://bruno_developer.com.br"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"App\\": "App/",
+			"MF\\": "vendor/MF/"
+		}
+	}
+}
