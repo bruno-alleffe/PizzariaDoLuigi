@@ -1,0 +1,220 @@
+<nav class=" navbar navbar-expand-md navbar-light bg-white fixed-top shadow navCardapio telaGrande">
+    
+    <div class="container">
+  
+          <ul class="navbar-nav m-auto">
+            <li class="nav-item">
+              <a href="/pizzas" class="nav-link text-info">Pizzas</a>
+            </li>
+			<li class="nav-item divisor2 bg-info"></li>
+
+            <li class="nav-item">
+              <a href="/bebidas" class="nav-link text-info">Bebidas</a>
+            </li>
+
+			<li class="nav-item divisor2 bg-info"></li>
+
+            <li class="nav-item">
+               <a href="/sobremesas" class="nav-link text-info">Sobremesas</a>
+            </li>
+            
+         </ul>
+          
+        
+    </div>
+
+</nav>
+
+<div class="TelaGrande mt-4" style="height: 5px;"></div>
+
+
+<!--Sessao Pizzas -->
+<!-- <div class="container">
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			
+			
+			<div class="card cardProduto">
+				<div class="bg-info rounded d-flex" style="height: 50px;">
+					<h3 class="text-white m-auto">Sobremesas</h3>
+				</div>
+				
+				<div class="card-body mt-3 shadow">
+					<div class=" imgPizzas">
+						<div class="row">
+							
+							<?php foreach($this->view->sobremesas as $id_sobremesa => $sobremesa) { ?>
+								
+							
+								<div class="col-md-3 mb-4 mt-4 border-bottom pb-5 divProduto">
+									<div class="row">
+										<div class="col-md-12 d-flex">
+											<img class="m-auto rounded img-fluid" src="img/imgProdutos/<?=$sobremesa['id_produto'].'/'.$sobremesa['img']?>">	
+										</div>
+
+										<div class="col-md-12 mt-3 ml-2 infoProduto">
+											<h6 class="text-dark font-weight-bold text-monospace mb-1"><?=$sobremesa['nome']?></h6>
+											<h6 class="text-secondary font-weight-bold text-monospace">R$ <?=number_format($sobremesa['valor'], 2, ',', '')?></h6>
+										</div>
+										
+										<div class="col-md-12 d-flex mb-2">
+											<form method="post" class="w-100"> 
+												<input name="id_produto" type="hidden" value="<?=$sobremesa['id_produto']?>">
+												<input name="nome" type="hidden" value="<?=$sobremesa['nome']?>">
+												<input name="valor" type="hidden" value="<?=$sobremesa['valor']?>">
+												<input name="tamanho" type="hidden" value="<?=$sobremesa['tamanho']?>">
+												<input name="tipo" type="hidden" value="<?=$sobremesa['tipo']?>">
+												<input name="img" type="hidden" value="<?=$sobremesa['img']?>">
+												
+												<?php if(!isset($_SESSION['pedido']['tipo'])) { ?>
+													<a href="/entregaBuscar" class="btn btn-danger w-100 btnProduto">Peça Agora</a>
+												<?php } else { ?>
+													<button onclick="atualiza()" data-action="/add/<?=$sobremesa['id_produto']?>" class="btn btn-danger w-100 btnProduto telaGrande">Adicionar ao carrinho</button>
+													<button onclick="atualiza()" data-action="/add/<?=$sobremesa['id_produto']?>" class="btn btn-danger w-100 btnProduto telaPequena">Adicionar</button>
+												<?php } ?>
+											</form>
+											
+												
+										</div>
+										<div class="col-md-12 text-left ml-2 descProduto">
+											<small class=" text-secondary"><?=$sobremesa['descricao']?></small>
+										</div>
+									</div>
+								</div>
+								
+							<?php } ?>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		<div class="col-md-1"></div>
+		</div>
+	</div>
+</div> -->
+
+
+<div class="container imgPizzas">
+
+	<div class="bg-info d-flex shadow mb-4" style="height: 50px;">
+		<h3 class="text-white m-auto">Sobremesas</h3>
+	</div>
+	
+	<div class="row rowProdutos">
+		
+		<?php foreach($this->view->sobremesas as $id_sobremesa => $sobremesa) { ?>
+			
+		
+			<div class="col-md-3 mb-4 mt-4 border-bottom pb-5 divProduto">
+				<div class="row">
+					<div class="col-md-12 d-flex">
+						<img class="m-auto img-fluid" src="img/imgProdutos/<?=$sobremesa['id_produto'].'/'.$sobremesa['img']?>">	
+					</div>
+
+					<div class="col-md-12 mt-3 ml-2 infoProduto">
+						<h6 class="text-dark font-weight-bold text-monospace mb-1"><?=$sobremesa['nome']?></h6>
+						<h6 class="text-secondary font-weight-bold text-monospace">R$ <?=number_format($sobremesa['valor'], 2, ',', '')?></h6>
+					</div>
+					
+					<div class="col-md-12 d-flex mb-2">
+						<!-- <form method="post" class="w-100"> 
+							<input name="id_produto" type="hidden" value="<?=$sobremesa['id_produto']?>">
+							<input name="nome" type="hidden" value="<?=$sobremesa['nome']?>">
+							<input name="valor" type="hidden" value="<?=$sobremesa['valor']?>">
+							<input name="tamanho" type="hidden" value="<?=$sobremesa['tamanho']?>">
+							<input name="tipo" type="hidden" value="<?=$sobremesa['tipo']?>">
+							<input name="img" type="hidden" value="<?=$sobremesa['img']?>"> -->
+							<!-- <button type="hidden" class="btn btn-danger w-100">Adicionar ao carrinho</button> -->
+							<?php if(!isset($_SESSION['pedido']['tipo'])) { ?>
+								<form action="/entregaBuscar" method="post" class="w-100">
+									<input type="hidden" value="sobremesas" name="paginaPedido">
+									<button type="submit" class="btn btn-danger w-100 btnProduto">Peça Agora</button>
+								</form>
+							<?php } else { ?>
+								<button onclick="atualiza()" data-action="/add/<?=$sobremesa['id_produto']?>" class="btn btn-danger w-100 btnProduto telaGrande">Adicionar ao carrinho</button>
+								<button onclick="atualiza()" data-action="/add/<?=$sobremesa['id_produto']?>" class="btn btn-danger w-100 btnProduto telaPequena">Adicionar</button>
+							<?php } ?>
+						<!-- </form> -->
+						
+							
+					</div>
+					<div class="col-md-12 text-left ml-2 descProduto">
+						<small class=" text-secondary"><?=$sobremesa['descricao']?></small>
+					</div>
+				</div>
+			</div>
+			
+		<?php } ?>
+
+	</div>
+</div>
+
+<!-- 
+<script>
+
+	$(function () {
+
+		$("[data-action]").click(function(e) {
+			e.preventDefault();
+			var data = $(this).data();
+
+			$.post(data.action, function(cart){
+				ajaxCart(cart);
+			}, "json");
+		});
+
+
+		$.post("/cart", function(cart) {
+			ajaxCart(cart);
+		}, "json");
+
+		
+
+		function ajaxCart(cart) {
+			var cart_messsage = $(".cart_message");
+			var cart_amount = $(".cart_total");
+			var cart_total = $(".cart_total");
+			var formater = Intl.NumberFormat("pt-BR", {
+				style: "currency",
+				currency: "BRL"
+			});
+
+			
+
+			// if(cart.message) {
+			// 	cart.message.fadeOut(200, function() {
+			// 		$(this).html(cart.message).fadeIn(200);
+			// 	});
+			// } else {
+			// 	cart.message.fadeOut(200);
+			// }
+
+			if(cart.items) {
+				$.each(cart.items, function(index, item) {
+					$(".item_"+item.id_produto).html(item.amount);
+					// $(".item_"+item.id); //quando tiver dinamicamente
+				})
+			} else {
+				$("span[class^='item_']").html("0");
+			}
+
+			if(cart.amount > 0) {
+				cart_amount.html(cart.amount);
+			} else {
+				cart_amount.html("0");
+			}
+
+			if (cart.total) {
+				cart_total.html("Total "+formater.format(cart.total));
+			} else {
+				cart_total.html("0,00");
+			}
+		}
+
+	});
+
+</script> -->
+
+

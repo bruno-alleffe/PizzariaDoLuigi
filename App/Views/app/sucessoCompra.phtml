@@ -1,0 +1,112 @@
+<script>
+
+function sessionAmount() { 
+
+	document.location.reload(true);
+}
+
+$(function () {
+
+	$.post("/cart", function(cart) {
+    	ajaxCart(cart);
+  	}, "json");
+
+
+	function ajaxCart(cart) {
+		
+		if(cart.amount == 0) {
+			window.location = '/cardapio'
+		}
+		
+	}
+})
+
+
+</script>
+
+<div class="container">
+  <div class="d-flex justify-content-center mt-2">
+    <div class="card" style="width: 36rem;">
+      <div class="card-body">
+
+			<div class="row">
+			<div class="col">
+				<h3 class="text-success text-center mb-5">Compra realizada com sucesso!</h3>
+				<h4 class="text-danger text-center"><i class="fas fa-exclamation-triangle mr-2"></i> Atenção!</h4>
+				<h5 class="text-secondary text-center">Anote o código para acompanhar o seu pedido.</h5>
+				<h5 class="text-secondary text-center">Na aba <b>"Acompanhar"</b>, digite o códico abaixo.</h5>
+				<h5 class="text-secondary text-center mb-5">Códico: <b><?=$_GET['id']?></b></h5>
+				
+			</div>
+			</div>
+
+			<div class="row">
+				<div class="col">
+				
+				<?php foreach($_SESSION['cart2']["items"] as $id_p => $produto) { ?>
+						
+						<div class="container border-bottom  mt-4 pb-3">
+						<div class="row">
+							<div class="col-5">
+							<img src="img/imgProdutos/<?=$produto['id_produto']?>/<?=$produto['img']?>" alt="" width="90" height="90">
+							</div>
+							<div class="col-7">
+							<div class="row">
+	
+								<div class="col-12">
+								<h6 class="text-dark ml-auto font-weight-bold text-monospace nomeTam"><?=$produto['nome']?></h6>
+								</div>
+	
+								<div class="col-12">
+								<h6 class="text-secondary ml-auto font-weight-bold text-monospace nomeTam tamp tam_<?=$produto['id_produto']?>"><?=$produto['tamanho']?></h6>
+								</div>
+	
+								<div class="col-6">
+									<small class="text-dark ml-auto font-weight-bold mt-4 nomeTamQnt valp val_<?=$produto['id_produto']?>">R$ <?=number_format($produto['valor'], 2, ',', '')?></small>
+								</div>
+	
+								<div class="col-6 ">
+									<small class="text-dark ml-auto font-weight-bold mt-4 nomeTamQnt qnt item_<?=$produto['id_produto']?>">Qnt: <?=$produto['amount']?></small>
+								</div>
+							</div>
+							</div> 
+					
+						</div>
+							
+						</div>
+						
+						
+					<?php } ?>
+					
+		
+				
+					<div class="bg-dark mt-3" style="height: 1px; width: 100%;"></div>
+					<div class="container mt-2 finalizarPedido">
+				
+							<div class="col-12 finalizarCompraTotal d-flex mt-3">
+								<h5 class="text-dark font-weight-bold text-monospace mt-4 m-auto text-center">Total: <?=number_format($_SESSION['cart2']['total'], 2, ',', '')?></h5>
+							</div>
+					</div>
+				
+				
+				
+						
+
+
+				</div>
+			</div>	
+				
+				
+			
+
+
+			<div class="row">
+			<div class="col mt-4">
+				<a href="/" class="btn btn-info btn-block btn-login m-auto mt-3">Voltar!</a>
+			</div>
+			</div> 
+
+      </div>
+    </div>
+  </div>
+</div>

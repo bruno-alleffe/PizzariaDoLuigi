@@ -1,0 +1,201 @@
+<script>
+
+	$(function() { 
+		$(".ingrediente").hide();
+		$(".quantidade").hide();
+	})
+		
+ 
+	
+
+	function tipoProduto(tipo){
+		if(tipo == 'pizza') {
+			$(".ingrediente").show();
+		} else {
+			$(".ingrediente").hide();
+		}
+
+		if(tipo == 'bebida' || tipo == 'sobremesa') {
+			$(".quantidade").show();
+		} else {
+			$(".quantidade").hide();
+		}
+		
+	}
+	
+</script>
+<!--Inicio Sessão Adicionar Produto -->
+<div class="container cardápio telaAddProduto">
+	<div class="row">
+		<div class="col-md-1"></div>
+		
+		<div class="col-md-10">
+			
+			<h3 class="text-info mb-4 telaGrande mt-3"><i class="fas fa-plus"></i> Adicionar Produto</h3>
+			<h5 class="text-info mb-4 telaPequena ml-2"><i class="fas fa-plus"></i> Adicionar Produto</h5>
+			
+		
+			<div class="d-flex">
+			
+				<form action="adicionarProdutoBanco" method="post" enctype="multipart/form-data" class="formAddProduto m-auto">
+
+					<?php if(isset($_SESSION['addProduto']) && $_SESSION['addProduto'] == 'erro') { ?>
+						<div class="d-flex">
+							<h5 class="text-danger ml-auto">Erro ao adicionar produto!</h5>
+						</div>
+					<?php } unset($_SESSION['addProduto']); ?>
+
+					<div class="custom-area">
+						<label class="text-info font-weight-bold" for="validationServer03">Nome do Produto:</label>
+						<input name="nome" type="text" class="form-control" id="validationServer03" required placeholder="Digite o nome do produto aqui...">
+						<div class="invalid-feedback">
+							O Nome do produto é obrigatório.
+						</div>
+					</div>
+					
+					<div class="custom-area mt-2">
+						<label class="text-info font-weight-bold" for="validationServer03">Valor:</label>
+						<input name="valor" type="number" step="0.01"  min="1" class="form-control" id="validationServer03" required placeholder="Digite o valor do produto aqui...">
+						<div class="invalid-feedback">
+							O preço do produto é obrigatório.
+						</div>
+					</div>
+
+					<div class="form-group mt-2">
+						<label class="text-info font-weight-bold" for="validationServer03">Tipo:</label>
+						<select name="tipo" class="custom-select" required onchange="tipoProduto(value)">
+						<option value="">Selecione um tipo</option>
+						<option value="pizza">Pizza</option>
+						<option value="bebida">Bebida</option>
+						<option value="sobremesa">Sobremesa</option>
+						</select>
+						<div class="invalid-feedback">Selecionar o tipo é obrigatório</div>
+					</div>
+
+					<div class="form-group mt-2 ingrediente">
+						<label class="text-danger font-weight-bold" for="validationServer03">Igrediente 1:</label>
+						<select name="ing1" class="custom-select">
+						<option value="">Selecione 1 Igrediente</option>
+						<?php foreach($this->view->ingredientes as $id_ingrediente => $ingrediente){ ?>
+							<option value="<?=$ingrediente['id_estoque']?>"><?=$ingrediente['nome']?></option>
+						<?php } ?>
+						</select>
+						<div class="invalid-feedback">Selecionar o tipo é obrigatório</div>
+					</div>
+
+					<div class="form-group mt-2 ingrediente">
+						<label class="text-danger font-weight-bold" for="validationServer03">Igrediente 2:</label>
+						<select name="ing2" class="custom-select" >
+						<option value="">Selecione 2 Igrediente</option>
+						<?php foreach($this->view->ingredientes as $id_ingrediente => $ingrediente){ ?>
+							<option value="<?=$ingrediente['id_estoque']?>"><?=$ingrediente['nome']?></option>
+						<?php } ?>
+						</select>
+						<div class="invalid-feedback">Selecionar o tipo é obrigatório</div>
+					</div>
+
+					<div class="form-group mt-2 ingrediente">
+						<label class="text-danger font-weight-bold" for="validationServer03">Igrediente 3:</label>
+						<select name="ing3" class="custom-select" >
+						<option value="">Selecione 3 Igrediente</option>
+						<?php foreach($this->view->ingredientes as $id_ingrediente => $ingrediente){ ?>
+							<option value="<?=$ingrediente['id_estoque']?>"><?=$ingrediente['nome']?></option>
+						<?php } ?>
+						</select>
+						<div class="invalid-feedback">Selecionar o tipo é obrigatório</div>
+					</div>
+
+					<div class="form-group mt-2 ingrediente">
+						<label class="text-danger font-weight-bold" for="validationServer03">Igrediente 4:</label>
+						<select name="ing4" class="custom-select" >
+						<option value="">Selecione 4 Igrediente</option>
+						<?php foreach($this->view->ingredientes as $id_ingrediente => $ingrediente){ ?>
+							<option value="<?=$ingrediente['id_estoque']?>"><?=$ingrediente['nome']?></option>
+						<?php } ?>
+						</select>
+						<div class="invalid-feedback">Selecionar o tipo é obrigatório</div>
+					</div>
+
+					<div class="form-group">
+						<label class="text-info font-weight-bold" for="validationServer03">Tamanho:</label>
+						<select name="tamanho" class="custom-select" required>
+						<option value="">Selecione um tamanho</option>
+						<option value="Pequena">Pequena</option>
+						<option value="Média">Média</option>
+						<option value="Grande">Grande</option>
+						<option value="250 ml">250 ml</option>
+						<option value="500 ml">500 ml</option>
+						<option value="600 ml">600 ml</option>
+						<option value="1 Litro">1 Litro</option>
+						<option value="1,5 Litros">1,5 Litros</option>
+						<option value="2 Litros">2 Litros</option>
+						<option value="2,5 Litros">2,5 Litros</option>
+						<option value="3 Litros">3 Litros</option>
+						<option value="Latra">Latra</option>
+						<option value="">Não tem tamanho, é uma sobremesa!</option>
+						</select>
+						<div class="invalid-feedback">Selecionar o tamanho é obrigatório</div>
+					</div>
+
+					<div class="custom-area mb-3">
+						<label class="text-info font-weight-bold" for="validationServer03">Descrição:</label>
+						<input name="descricao" type="text" class="form-control" id="validationServer03" required placeholder="Digite uma descricao aqui...">
+						
+					</div>
+
+					<div class="custom-area mt-2 quantidade">
+						<label class="text-danger font-weight-bold" for="validationServer03">Quantidade:</label>
+						<input name="quantidade" type="number" min="1" class="form-control" id="validationServer03" placeholder="Digite a quantidade do estoque aqui...">
+					</div>
+
+					<label class="text-info font-weight-bold" for="validationServer03">Imagem:</label>
+					<div class="custom-file">
+						<input type="file" accept="image/*" class="custom-file-input" id="validatedCustomFile" required name="img" lang="es">
+						<label class="custom-file-label" for="validatedCustomFile">Escolha uma imagem...</label>
+						<div class="invalid-feedback">A imagem do produto é obrigatória</div>
+					</div>
+					<div class="d-flex">
+						<button type="submit" class="btn btn-primary mt-4 ml-auto">Adicionar</button>
+					</div>
+					
+				</form>
+				
+
+			</div>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+</div><!--Fim Sessão Adicionar Produto -->
+
+<!-- Modal Sucesso -->
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title text-success" id="exampleModalLongTitle"></h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		
+		<div class="row">
+			<div class="col-1"></div>
+			<div id="registro" class="modal-body text-success col-11">
+				<h4> Produto Adicionado Com Sucesso!</h4>
+			</div>
+		</div>
+
+		<div class="modal-footer">
+		</div>
+	</div>
+</div>
+</div><!-- Fim do Modal  -->
+
+<script>
+
+	$(window).on("load", function(){
+		msgProdutoAdicionado(location.search.slice(1));
+	});
+	
+
+</script>

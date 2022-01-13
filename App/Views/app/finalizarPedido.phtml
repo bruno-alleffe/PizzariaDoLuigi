@@ -1,0 +1,186 @@
+<script>
+
+$(function () {
+	$("#carrinhoIcone").hide()
+})
+
+// function sessionAmount() { 
+
+// 	document.location.reload(true);
+// }
+
+function a() {
+
+	$(function () {
+
+$.post("/cart", function(cart) {
+	ajaxCart(cart);
+  }, "json");
+
+
+function ajaxCart(cart) {
+	console.log(cart.amount);
+	if(cart.amount == 0) {
+		window.location = '/cardapio'
+	}
+	
+}
+})
+
+}
+
+
+
+
+</script>
+
+<?php if(count($_SESSION['pedido']) == 0 OR $_SESSION['cart']['amount'] == 0) { ?>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+
+				<div class="modal-body carrinhoVazio m-auto">
+				<p class="text-dark font-weight-normal text-center">Seu carrinho está vazio, mas a sua barriga não precisa estar. Adicione seus itens de preferência e volte aqui para finalizar o seu pedido.</p>
+				</div>
+
+				<form class="carrinhoVazio m-auto" action="cardapio" method="post">
+					<button type="submit" class="btn btn-danger btn-block m-auto">COMEÇAR O PEDIDO</button>
+				</form>
+				<div class="d-flex" style="margin-bottom: 5em;">
+					<small class="text-danger m-auto pb-3 carrinhoVazio">*Comece clicando aqui</small>
+				</div>
+				
+
+			</div>
+		</div>
+	</div>
+	
+		
+<?php } ?>
+
+<?php if(count($_SESSION['pedido']) > 0 AND $_SESSION['cart']['amount'] > 0) { ?>
+
+	<div class="container">
+		
+		
+		<div class="row">
+			
+			<div class="col-12 d-flex mb-4 mb-5 bg-info" style="height: 40px;">
+				<h6 class="text-white m-auto text-center">Verifique tudo antes de finalizar a compra!</h6>
+			</div>
+		
+			<div class="col-md-6 mb-5">
+				
+				<div class="mt-3">
+					
+					<h4 class="text-info text-center">Informações</h4>
+	
+					<h5 class="text-secondary text-center">Tipo do pedido: <?=$_SESSION['pedido']['tipo']?></h5>
+					<h5 class="text-secondary text-center">Rua: <?=$_SESSION['pedido']['rua']?></h5>
+					<h5 class="text-secondary text-center">Número: <?=$_SESSION['pedido']['numero']?></h5>
+					<h5 class="text-secondary text-center">Bairro: <?=$_SESSION['pedido']['bairro']?></h5>
+					<h5 class="text-secondary text-center">Tel: <?=$_SESSION['pedido']['tel']?></h5>
+					<h5 class="text-secondary text-center">Informações: <?=$_SESSION['pedido']['info']?></h5>
+					
+					<div class="d-flex mt-3">
+						<a href="/entregaBuscar" class="btn btn-info m-auto">Atualizar Informações</a>
+					</div>
+						
+				</div>
+				
+			</div>
+	
+				
+			<div class="col-md-6 "><!-- Inigio Lista de pedidos -->
+	
+				
+				<div class="mt-3 ">
+				
+					
+					
+					<?php foreach($_SESSION['cart']["items"] as $id_p => $produto) { ?>
+						
+						<div class="container border-bottom  mt-4 pb-3 imgNomePreco imgNomePreco_<?=$produto['id_produto']?>">
+						<div class="row">
+							<div class="col-4 imgp imgp_<?=$produto['id_produto']?>">
+							<img src="img/imgProdutos/<?=$produto['id_produto']?>/<?=$produto['img']?>" alt="" width="90" height="90">
+							</div>
+							<div class="col-5">
+							<div class="row">
+	
+								<div class="col-12">
+								<h6 class="text-dark ml-auto font-weight-bold text-monospace nomeTam nomep nome_<?=$produto['id_produto']?>"></h6>
+								</div>
+	
+								<div class="col-12">
+								<h6 class="text-secondary ml-auto font-weight-bold text-monospace nomeTam tamp tam_<?=$produto['id_produto']?>"> <?=$produto['tamanho']?>"> <?=$produto['tamanho']?></h6>
+								</div>
+	
+								<div class="col-6">
+									<small class="text-dark ml-auto font-weight-bold mt-4 nomeTamQnt valp val_<?=$produto['id_produto']?>">R$ <?=number_format($produto['valor'], 2, ',', '')?></small>
+								</div>
+	
+								<div class="col-6 ">
+									<small class="text-dark ml-auto font-weight-bold mt-4 nomeTamQnt qnt item_<?=$produto['id_produto']?>"></small>
+								</div>
+							</div>
+							</div> 
+						
+								
+							<div class="col-3">
+								<div class="row">
+									
+									<div class="col-12 ml-3">
+										<button data-action="/add/<?=$produto['id_produto']?>" class="btn btn-success btnMais">+</button>
+									</div>
+	
+									<div class="col-12 ml-3">
+										<button onclick="a()" data-action="/remove/<?=$produto['id_produto']?>" class="btn btn-danger btnMenos">-</button>
+									</div>
+									
+									<!-- <div class="col-12 maisMenos maisMenos_<?=$produto['id_produto']?>">
+									
+									</div> -->
+								</div>
+							</div>
+						</div>
+							
+						</div>
+						
+						
+					<?php } ?>
+					
+					<?php if (count($_SESSION['cart']['items']) > 0) { ?>
+						<div class="precoFinalizar">
+						<div class="bg-dark mt-3" style="height: 1px; width: 100%;"></div>
+							<div class="container mt-2 finalizarPedido">
+								<div class="row">
+									<div class="col-md-6 finalizarCompraTotal">
+										<h5 class="text-dark font-weight-bold text-monospace mt-4 cart_total"><?=number_format($produto['total'], 2, ',', '')?></h5>
+									</div>
+									<div class="col-md-6">
+										<a href="/cardapio" class="btn btn-info mt-2">Adicionar Itens</a>
+										<a href="/paginaPagamento" class="btn btn-success mt-2">Finalizar Compra</a>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php } ?>
+								
+				</div>
+				
+						
+			</div><!-- Inigio Lista de pedidos -->
+		
+		</div><!-- Fim Row -->
+	</div> <!-- Fim Conteiner -->
+
+
+<?php } ?>
+
+
+	
+	 	
+

@@ -1,0 +1,99 @@
+<!--Sessao Pizzas -->
+<div class="container imgPizzas">
+
+	<div class="bg-info shadow mb-4 d-flex" style="height: 50px;">
+					
+		<h3 class="text-white m-auto">Bebidas</h3>
+	</div>
+
+	<div class="row">
+		
+		<?php foreach($this->view->bebidas as $id_bebida => $bebida) { ?>
+			<div class="col-md-3 mb-4 mt-4 border-bottom pb-5 divProduto">
+				<div class="row">
+					<div class="col-md-12 d-flex">
+						<img class="m-auto " src="img/imgProdutos/<?=$bebida['id_produto'].'/'.$bebida['img']?>">	
+					</div>
+					<div class="col-md-12 mt-3 ml-2 mb-3">
+						<h6 class="text-dark font-weight-bold text-monospace mb-1"><?=$bebida['nome']?></h6>
+						<h6 class="text-dark font-weight-bold text-monospace">R$ <?=number_format($bebida['valor'], 2, ',', '')?></h6>	
+					</div>
+					
+					<div class="col-md-12 d-flex">
+						<form id="form_delete" action="/removeProdutoBanco" method="post" class="w-100">
+							<input type="hidden" name="id_produto" value="<?=$bebida['id_produto']?>">
+							<input type="hidden" name="tipo" value="<?=$bebida['nome']?>">
+							<button type="button" class="btn btn-danger w-100" data-toggle="modal" data-target="#exampleModalCenter" onclick="insereModalRemoverPizza(<?=$bebida['id_produto']?>, '<?=$bebida['nome']?>', '<?=$bebida['tipo']?>' )">Remover</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		<?php } ?>
+
+	</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+	<div class="modal-header">
+		<h4 class="modal-title" id="exampleModalLongTitle">Tem certeza que deseja excluir esse produto ?</h4>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div id="registro" class="modal-body text-danger">
+		Cuidado! Esse produto será removido permanentemente!
+	</div>
+	
+	<div class="modal-footer">
+		<form  action="/removeProdutoBanco" method="post" class="">
+			<input id="id_pizza" type="hidden" name="id_produto">
+			<input id="nome_pizza" type="hidden" name="nome">
+			<input id="tipo_pizza" type="hidden" name="tipo" >
+			<div class="row">
+				<button type="submit" class="btn btn-info col-5">Sim</button>
+				<div class="col-2"></div>
+				<button type="button" class="btn btn-danger col-5" data-dismiss="modal">Cancelar</button>
+			</div>
+			
+		</form>
+	</div>
+	</div>
+</div>
+</div><!-- Fim do Modal  -->
+
+<!-- Modal Sucesso -->
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title text-success" id="exampleModalLongTitle"></h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		
+		<div class="row">
+			<div class="col-1"></div>
+			<div id="registro" class="modal-body text-success col-11">
+				<h4> Produto Removido com Sucesso!</h4>
+			</div>
+		</div>
+
+		<div class="modal-footer">
+		</div>
+	</div>
+</div>
+</div><!-- Fim do Modal  -->
+
+<script>
+
+	$(window).on("load", function(){
+		msgProdutoRemovido(location.search.slice(1));
+	});
+	
+
+</script>

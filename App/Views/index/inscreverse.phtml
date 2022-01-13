@@ -1,0 +1,58 @@
+<?php 
+
+if(!isset($this->view->usuario['nome'])) {
+  $this->view->usuario['nome'] = '';
+  }
+?>
+
+<div class="container">
+  <div class="d-flex justify-content-center mt-3">
+    <div class="card" style="width: 36rem;">
+      <div class="card-body">
+
+        <div class="row">
+          <div class="col">
+            <h2 class="telaGrande">Crie sua conta</h2>
+            <h3 class="telaPequena pb-3">Crie sua conta</h3>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            
+            <form action="/registrar" method="post">
+              <div class="form-group">
+                <input type="text" value="<?= $this->view->usuario['nome'] ?>" name="nome" class="form-control" id="validationServer01" placeholder="Nome">
+              </div>
+              
+              <div class="form-group">
+                <input type="email" value="<?= $this->view->usuario['email'] ?>" name="email" class="form-control" placeholder="E-mail">
+              </div>
+
+              <div class="form-group">
+                <input type="password" value="<?= $this->view->usuario['senha'] ?>" name="senha" class="form-control" placeholder="Senha">
+              </div>
+              
+              <div class="mt-4 mb-4">    
+                <small class="form-text ml-2">
+                <input type="checkbox" required='required'>
+                  <small class="text-danger pl-1"> *</small>
+                    Ao inscrever-se, você concorda com o tratamento dos seus dados pessoais de acordo com os Termos de Serviço e com as Políticas de Privacidade, incluindo o Uso de Cookies. Outras pessoas poderão encontrar você pelo e-mail ou número de telefone fornecido · Declaro estar ciente sobre a Política de Uso de Dados Pessoais da Pizzaria do Luigi
+                </small>
+              </div>
+              <button type="submit" class="btn btn-info btn-login btn-block m-auto w-75">Inscrever-se</button>
+
+              <?php if($this->view->erroCadastro) { ?>
+
+                <small class="form-text text-danger d-flex justify-content-center">*Erro ao tentar realizar o cadastro, verifique se os campos foram preenchidos corretamente.</small>
+
+              <?php } ?>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

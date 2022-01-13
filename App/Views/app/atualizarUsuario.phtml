@@ -1,0 +1,229 @@
+<script>
+	
+
+   function modalExcluirUsuario(id) {
+	   console.log(id);
+	   $("#modalExcluirUsuario").modal('show');
+	   document.getElementById('excluirUsuario').value = id;
+   }
+
+   $(window).on("load", function(){
+
+		var query =location.search.slice(1)
+		var partes = query.split('&');
+		var data = {};
+		partes.forEach(function (parte) {
+			var chaveValor = parte.split('=');
+			var chave = chaveValor[0];
+			var valor = chaveValor[1];
+			data[chave] = valor;
+		});
+
+
+		if (data['error'] == 'false') {
+			$('.msgAtualizar_'+data['id']).html('Usuário Atualizado com sucesso!');
+		}
+		if (data['error'] == 'true') {
+			$('.msgError_'+data['id']).html('Erro ao atualizar usuário!');
+		}
+		
+	});
+
+	$(function() {
+		$(".formAtualizaUsuario").hide();
+
+	})
+
+	function mostrarFormAtualizaUsuario(id) {
+		$(".formAtualizaUsuario_"+id).show();
+		$(".btnEditarUsuario_"+id).hide();
+		
+	
+	}
+	function esconderFormAtualizaUsuario(id) {
+		$(".formAtualizaUsuario_"+id).hide();
+		$(".btnEditarUsuario_"+id).show();
+		
+	}
+   
+
+</script>
+
+
+<?php
+	 $tipo = 'cliente';
+    if (isset($_POST["tipo"])){
+        $tipo = $_POST["tipo"];
+    }
+?>
+<!--Sessao Pedidos -->
+<div class="container">
+
+	<div class="bg-info shadow mb-4 d-flex" style="height: 50px;">
+		<h4 class="text-white m-auto">Usuários: <?=ucfirst($tipo)?></h4>
+	</div>
+
+	<div class="row">
+		<form class="form-group col-md-3" id="formUsuarios" action="#" method="POST" >
+			<select class="form-control" name="tipo" onchange="document.getElementById('formUsuarios').submit()">
+				<option>Filtro por TIpo</option>
+				<option value="cliente">Cliente</option>
+			<option value="garçom">Garçom</option>
+			<option value="caixa">Caixa</option>
+			<option value="administrador">Administrador</option>
+			</select>
+		</form>
+	</div>
+
+	
+	<div class="row">
+		
+		
+		<?php foreach($this->view->usuarios as $id_usuario => $usuario) { ?>
+			<?php if($_SESSION['id_usuario'] == $usuario['id_usuario']) { continue; }?>
+			<?php if($usuario['tipo'] != $tipo) { continue; }?>
+			<div class="col-md-4 mb-4 mt-4 border-bottom pb-5 divPedidos">
+				<div class="row">
+
+					<div class="table-responsive" >
+						<div class="col-md-12 mt-3 mb-2 divPedidosTabela ">
+							<table class="table table-striped table-bordered divPedidosTabela">
+							<thead class="bg-secondary">
+								<tr>
+								<th class="text-white" scope="col">Usuario</th>
+								<th class="text-white" scope="col"># <?=$usuario['id_usuario']?></th>
+				
+								</tr>
+							</thead>
+							
+							<tbody class="">
+								<tr >
+									<th class="text-dark" scope="row">Nome</th>
+									<td class="text-secondary"><?=$usuario['nome']?></td>
+								</tr>
+								<tr class="userEmail">
+									<th class="text-dark" scope="row">E-mail</th>
+									<td class="text-secondary"><?=$usuario['email']?></td>
+								</tr>
+								
+								<tr>
+									<th class="text-dark" scope="row">Tipo</th>
+									<td class="text-secondary"><?=ucfirst($usuario['tipo'])?></td>
+								</tr>
+							</tbody>
+							</table>
+							<div class="row"> 
+								<div class="col-12 mt-2">
+									<button onclick="mostrarFormAtualizaUsuario(<?=$usuario['id_usuario']?>)" class="btn btn-info btnEditarUsuario_<?=$usuario['id_usuario']?> w-100 p-1">Editar</button>
+								</div>
+							</div>
+							<h6 class="msgAtualizar_<?=$usuario['id_usuario']?> text-success text-center btnEditarUsuario_<?=$usuario['id_usuario']?>"></h6>
+							<h6 class="msgError_<?=$usuario['id_usuario']?> text-danger text-center btnEditarUsuario_<?=$usuario['id_usuario']?>"></h6>
+
+
+							<div class="row formAtualizaUsuario formAtualizaUsuario_<?=$usuario['id_usuario']?>">
+								<form action="atualizarUsuarioBanco" method="post" class="formAddProduto col-12">
+									<div class="custom-area">
+										<input name="id_usuario" type="hidden" value="<?=$usuario['id_usuario']?>">
+										<label class="text-info font-weight-bold" for="validationServer03">Nome do usuário:</label>
+										<input name="nome" type="text" class="form-control" id="validationServer03" value="<?=$usuario['nome']?>" placeholder="Digite o nome...">
+
+										<label class="text-info font-weight-bold mt-2" for="validationServer03">E-mail:</label>
+										<input name="email" type="email" class="form-control" id="validationServer03" value="<?=$usuario['email']?>" placeholder="Digite e-mail...">
+
+										<label class="text-info font-weight-bold mt-2" for="validationServer03">Tipo:</label>
+										<select class="form-control" name="tipo">
+											<option value="<?=$usuario['tipo']?>">Selecione o TIpo</option>
+											<option value="cliente">Cliente</option>
+											<option value="garçom">Garçom</option>
+											<option value="caixa">Caixa</option>
+											<option value="administrador">Administrador</option>
+										</select>
+
+										<label class="text-info font-weight-bold mt-2" for="validationServer03">Nova Senha:</label>
+										<input name="senha" type="text" class="form-control" id="validationServer03" minlength="6" placeholder="Deixe em branco para manter a mesma...">
+									</div>
+									<button type="submit" class="btn btn-info p-1 w-100 mt-4">Atualizar</button>
+
+									
+								</form>
+								<div class="col-12">
+									<button onclick="esconderFormAtualizaUsuario(<?=$usuario['id_usuario']?>)" class="btn btn-danger p-1 w-100 mt-3">Cancelar</button>
+								</div>
+								
+							
+								
+						
+							</div>
+								
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		<?php } ?>
+
+	</div>
+</div>
+
+<?php if(count($this->view->usuarios) < 1) { ?>
+	<div style="margin-bottom: 250px;"></div>
+	
+<?php } ?>	
+
+<!-- Modal Fechar Pedido -->
+<div class="modal fade" id="modalExcluirUsuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+	<div class="modal-header">
+		<h4 class="modal-title" id="exampleModalLongTitle">Tem certeza que deseja excluir esse usuario ?</h4>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div id="registro" class="modal-body text-danger">
+		Cuidado! Esse usuuario será excluido!
+	</div>
+	
+	<div class="modal-footer">
+	
+		<form action="/removerUsuarioBanco" method="post">
+			<input id="excluirUsuario" type="hidden" name="id_usuario">
+			<div class="row">
+				<button type="submit" class="btn btn-info col-5">Sim</button>
+				<div class="col-2"></div>	
+				<button type="button" class="btn btn-danger col-5" data-dismiss="modal">Cancelar</button>
+			</div>	
+		
+		</form>
+	
+	</div>
+			
+	</div>
+	</div>
+</div>
+</div><!-- Fim do Modal  -->
+
+<!-- Modal Sucesso -->
+<div class="modal fade" id="modalUsuarioRemovidoSucesso" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title text-success" id="exampleModalLongTitle"></h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		
+		<div class="row">
+			<div class="col-1"></div>
+			<div id="registro" class="modal-body text-success col-11">
+				<h4> Usuario removido com sucesso!</h4>
+			</div>
+		</div>
+
+		<div class="modal-footer">
+		</div>
+	</div>
+</div>
+</div><!-- Fim do Modal  -->

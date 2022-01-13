@@ -1,0 +1,244 @@
+<!-- <section class="botoões mt-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <div class="row">
+
+          <div class="col-md-12">
+            <div class="row">
+
+           
+              <div class="col-12 m-auto">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="row">
+                      <div class="col-md-2"></div>
+                      
+                        <div class="col-md-3 div_entrega d-flex">
+                          <div class="ml-auto">
+                            <a href="#" class="btn btn-info btn-delivery d-flex m-auto"><img class=" ml-3" src="img/delivery.svg" width="70"></a>
+                            <h5 class="text-secondary text-center mt-1">Entrega</h5>
+                          </div>    
+                        </div>
+                          
+                        <div class="div_ou col-md-2 d-flex align-items-center justify-content-center mb-4">
+                          <h3 class="or or2">ou</h3>
+                        </div>
+                          
+
+                          <div class="col-md-3 div_buscar d-flex">
+                            <div class="mr-auto">
+                              <a href="#" class=" btn btn-info btn-delivery d-flex m-auto"><img class=" ml-4" src="img/buscar.svg" width="47s"></a>
+                              <h5 class="text-secondary text-center mt-1">Buscar</h5>
+                            </div>
+                            
+                          </div>
+
+                        <div class="col-md-2"></div>
+                    </div> 
+                  </div>
+                </div>      
+              </div>  
+             
+
+            </div>
+          </div>
+        
+
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+  </div>
+</section> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+<script>
+  $(function () {
+	  $(".formBuscar").hide()
+  })
+
+  function formEndereco() {
+    $(".formEndereco").show()
+    $(".formBuscar").hide()
+  }
+
+  function buscar() {
+    $(".formEndereco").hide()
+    $(".formBuscar").show()
+  }
+
+  function getDadosEnderecoPorCEP(cep) {
+				let url = 'https://viacep.com.br/ws/'+cep+'/json/unicode/'
+
+				let xmlHttp = new XMLHttpRequest()
+				xmlHttp.open('GET', url)
+
+				xmlHttp.onreadystatechange = () => {
+					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+						let dadosJSONText = xmlHttp.responseText
+						let dadosJSONObj = JSON.parse(dadosJSONText)
+
+            console.log(xmlHttp.responseText);
+
+						document.getElementById('rua').value = dadosJSONObj.logradouro
+						document.getElementById('bairro').value = dadosJSONObj.bairro
+						document.getElementById('cidade').value = dadosJSONObj.localidade
+						document.getElementById('uf').value = dadosJSONObj.uf
+						
+					}
+				}
+
+				xmlHttp.send()
+			}
+      
+</script>
+<?php
+     $_SESSION['pedido']['pagina'] = (!empty($_POST['paginaPedido']) ? $_POST['paginaPedido'] : '');
+?>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-1"></div>
+		
+    <div class="col-md-10 mt-4">
+			
+			<!-- Inicio Card -->
+			<div class="card cardEntregaBuscar">
+				<div class="bg-info rounded d-flex" style="height: 50px;">
+					<h4 class="text-white m-auto">Escolha o serviço desejado</h4>
+				</div>
+				
+				<div class="card-body mt-3">
+						<div class="row">
+             
+              <div class="col-12 mb-5">
+                <div class="row rowwww">
+                  <div class="col-md-2"></div>
+                  
+                    <div class="col-md-3 div_entrega d-flex">
+                      <div class="ml-auto">
+                        <a href="#" class="btn btn-info btn-delivery d-flex m-auto"  onclick="formEndereco()"><img class=" ml-3 imgEntregar" src="img/delivery.svg" width="200"></a>
+                        <h5 class="text-secondary text-center mt-1">Entrega</h5>
+                      </div>    
+                    </div>
+                      
+                    <div class="div_ou col-md-2 d-flex align-items-center justify-content-center mb-4">
+                      <h3 class="or or2">ou</h3>
+                    </div>
+
+                      <div class="col-md-3 div_buscar d-flex">
+                        <div class="mr-auto">
+                          <a href="#" class=" btn btn-info btn-delivery d-flex" onclick="buscar()"><img class="imgBuscar" src="img/buscar.svg" width="46"></a>
+                            <h5 class="text-secondary text-center mt-1">Buscar</h5>
+                        </div>
+                      </div>
+
+                    <div class="col-md-2"></div>
+                </div> 
+              </div> <!-- Fim Botões Entrega e Buscar  -->
+
+              <form action="/adicionarPedido" method="post" class="formEndereco m-auto">
+
+                <input name="tipo" type="hidden" value="Entregar">
+            
+
+                <div class="custom-area mb-1">
+                  <label class="text-secondary font-weight-bold" for="validationServer03"><small class="text-danger">*</small> Insira o seu CEP:</label>
+                  <input name="cep" type="text" class="form-control form-control-sm" id="validationServer03" required placeholder="Ex: 12345-676" onblur="getDadosEnderecoPorCEP(this.value)">
+                </div>
+
+                <div class="custom-area mb-1">
+                  <label class="text-secondary font-weight-bold" for="validationServer03"><small class="text-danger">*</small> Cidade:</label>
+                  <input name="cidade" type="text" class="form-control form-control-sm" id="cidade" required placeholder="" readonly>
+                </div>
+
+                <div class="custom-area mb-1">
+                  <label class="text-secondary font-weight-bold" for="validationServer03"><small class="text-danger">*</small> UF:</label>
+                  <input name="uf" type="text" class="form-control form-control-sm" id="uf" required placeholder="" readonly>
+                </div>
+
+                <div class="custom-area mb-1">
+                  <label class="text-secondary font-weight-bold" for="validationServer03"><small class="text-danger">*</small> Rua:</label>
+                  <input name="rua" type="text" class="form-control form-control-sm" id="rua" required placeholder="">
+                </div>
+
+                <div class="custom-area mb-1">
+                  <label class="text-secondary font-weight-bold" for="validationServer03"><small class="text-danger">*</small> Numero:</label>
+                  <input name="numero" type="number" class="form-control form-control-sm" id="validationServer03" required placeholder="">
+                </div>
+
+                <div class="custom-area mb-1">
+                  <label class="text-secondary font-weight-bold" for="validationServer03"><small class="text-danger">*</small> Bairro:</label>
+                  <input name="bairro" type="text" class="form-control form-control-sm" id="bairro" required placeholder="">
+                </div>
+                
+
+                <div class="custom-area mb-2">
+                  <label class="text-secondary font-weight-bold" for="validationServer03">Telefone:</label>
+                  <input name="tel" type="tel" class="form-control form-control-sm" id="" minlength="15" onkeypress="$(this).mask('(00) 00000-0000')" placeholder="(xx) xxxxx-xxxx"">
+                </div>
+
+                <div class="custom-area mb-1">
+                  <label class="text-secondary font-weight-bold" for="validationServer03">Informações Adicionais:</label>
+                  <textarea name="info" type="textarea" class="form-control form-control-sm" maxlength="50" id="validationServer03" rows="3" placeholder=""></textarea>
+                </div>
+              
+                <div class="mt-5">
+                <button type="submit" class="btn btn-danger btn-block m-auto w-50">Continuar</button>
+                </div>
+                
+              </form>
+
+              <form action="/adicionarPedido" method="post" class="formBuscar m-auto cardEntregaBuscar">
+
+                <input name="tipo" type="hidden" value="Retirar na loja">
+                <input name="rua" type="hidden" value="Rua da Pizzaria">
+                <input name="numero" type="hidden" value="777">
+                <input name="bairro" type="hidden" value="Bairro da Pizzaria">
+
+                <h5 class="text-secondary text-center">CEP: 62598-000</h5>
+                <h5 class="text-secondary text-center">Cidade: Jijoca de Jericoacoara</h5>
+                <h5 class="text-secondary text-center">UF: CE</h5>
+                <h5 class="text-secondary text-center">Rua: Rua da Pizzaria</h5>
+                <h5 class="text-secondary text-center">Número: 777</h5>
+                <h5 class="text-secondary text-center">Bairro: Bairro da Pizzaria</h5>
+
+                <div class="custom-area mb-2">
+                  <label class="text-secondary font-weight-bold" for="validationServer03"><small class="text-danger">*</small> Telefone:</label>
+                  <input name="tel" type="tel" class="form-control form-control-sm" id="" required minlength="15" onkeypress="$(this).mask('(00) 00000-0000')" placeholder="(xx) xxxxx-xxxx"">
+                </div>
+                
+                <div class="custom-area mb-1 mt-4">
+                  <label class="text-secondary font-weight-bold" for="validationServer03">Informações Adicionais:</label>
+                  <textarea name="info" type="textarea" class="form-control form-control-sm" maxlength="50" id="" rows="3" placeholder=""></textarea>
+                </div>
+              
+                <div class="mt-5">
+                <button type="submit" class="btn btn-danger btn-block m-auto w-50">Continuar</button>
+                </div>
+                
+              </form>
+                  
+						</div>
+				</div>
+			</div><!-- Fim Card -->
+		
+		</div>
+
+    <div class="col-md-1"></div>
+	</div>
+</div><!--Fim Sessão Pizzas -->
+
+
+
+
+
+
+  
+
+
+
+    
+
+

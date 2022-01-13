@@ -1,0 +1,149 @@
+<script>
+	$(function() {
+		$(".verMais").hide();
+		$(".btnVerMenos").hide();
+	})
+
+	function verMais(id) {
+		$(".verMais_"+id).show();
+		$(".btnVerMenos_"+id).show();
+		$(".btnVerMais_"+id).hide();
+	}
+	function verMenos(id) {
+		$(".verMais_"+id).hide();
+		$(".btnVerMenos_"+id).hide();
+		$(".btnVerMais_"+id).show();
+		
+	}
+
+
+    function printDiv(id) {
+        var divToPrint = document.getElementById('areaToPrint_'+id);
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+   }
+
+</script>
+
+<!--Sessao Pedidos -->
+<div class="container ">
+	<div class="bg-danger shadow mb-4 d-flex" style="height: 50px;">
+		<h4 class="text-white m-auto">Pedidos fechados</h4>
+	</div>
+
+	<div class="row">
+		
+		<?php foreach($this->view->pedidos as $id_pedido => $pedido) { ?>
+			<div class="col-md-4 mb-4 mt-4 border-bottom pb-5 divPedidos">
+				<div class="row">
+
+				<div class="table-responsive" >
+					<div class="col-md-12 mt-3 mb-2 divPedidosTabela ">
+						<table id="areaToPrint_<?=$pedido['id_pedido']?>" class="table table-striped table-bordered divPedidosTabela">
+						<thead class="bg-secondary">
+							<tr>
+							<th class="text-white" scope="col">Pedido</th>
+							<th class="text-white" scope="col"># <?=$pedido['id_pedido']?></th>
+			
+							</tr>
+						</thead>
+						
+						<tbody class="">
+							<tr >
+								<th class="text-dark" scope="row">Tipo</th>
+								<td class="text-secondary"><?=$pedido['tipo']?></td>
+							</tr>
+							<tr>
+								<th class="text-dark" scope="row">Rua</th>
+								<td class="text-secondary"><?=$pedido['rua']?></td>
+							</tr>
+							
+							<tr>
+								<th class="text-dark" scope="row">Numero</th>
+								<td class="text-secondary"><?=$pedido['numero']?></td>
+							</tr>
+							
+							<tr>
+								<th class="text-dark" scope="row">Bairro</th>
+								<td class="text-secondary"><?=$pedido['bairro']?></td>
+							</tr>
+							
+							<tr>
+								<th class="text-dark" scope="row">Telefone</th>
+								<td class="text-secondary"><?=$pedido['telefone']?></td>
+							</tr>
+							<tr>
+								<th class="text-dark" scope="row">Total</th>
+								<td class="text-secondary">R$ <?=number_format($pedido['total'], 2, ',', '')?></td>
+							</tr>
+							<tr>
+								<th class="text-dark" scope="row">Status</th>
+								<td class="text-danger"><?=$pedido['status']?></td>
+							</tr>
+							<tr>
+								<th class="text-dark" scope="row">Data</th>
+								<td class="text-secondary"><?=$pedido['data']?></td>
+							</tr>
+							<tr class=" verMais verMais_<?=$pedido['id_pedido']?>">
+								<th class="text-dark" scope="row">Info.</th>
+								<td class="text-secondary"><?=$pedido['info_adicionais']?></td>
+							</tr>
+							<?php foreach($this->view->produtos_pedidos as $id_produto => $produto) { ?>
+								<?php if($produto['id_pedido'] == $pedido['id_pedido']) { ?>
+
+									<tr class=" verMais verMais_<?=$pedido['id_pedido']?>">
+										<th class="text-dark" scope="row"><img src="img/imgProdutos/<?=$produto['id_produto']?>/<?=$produto['img']?>" alt="" width="90" height="90"></th>
+										<td class="text-secondary"><b><?=$produto['nome']?></b> <?php if($produto['tamanho'] != ''){echo '<br>';}?> <?=$produto['tamanho']?><br>Qnt: <?=$produto['quantidade']?><br>R$ <?=number_format($produto['total'], 2, ',', '')?></td>
+									
+									</tr>
+								<?php } ?>
+							<?php } ?>	
+							
+						
+						</tbody>
+						</table>
+						<div class="row"> 
+							<div class="col-12 mb-3">
+								<button onclick="verMenos(<?=$pedido['id_pedido']?>)" class="btn btn-outline-danger w-100 p-1 btnVerMenos btnVerMenos_<?=$pedido['id_pedido']?>">Ver Menos</button>
+							</div>
+							<div class="col-12  mb-3">
+								<button onclick="verMais(<?=$pedido['id_pedido']?>)" class="btn btn-outline-dark w-100 p-1 btnVerMais_<?=$pedido['id_pedido']?>">Ver Mais...</button>
+							</div>
+						</div>	
+
+						<div class="row"> 
+							
+
+							<div class="col-6">
+								<button onclick="printDiv(<?=$pedido['id_pedido']?>)" class="btn btn-secondary w-100 p-1">Imprimir</button>
+							</div>
+							
+							<div class="col-6">
+								<button class="btn btn-danger w-100 p-1">Excluir</button>
+							</div>
+
+							
+						</div>
+						
+					</div>
+
+
+				</div>
+
+				
+					
+					
+				
+				
+					
+					
+					
+					
+				</div>
+			</div>
+		<?php } ?>
+
+	</div>
+</div>

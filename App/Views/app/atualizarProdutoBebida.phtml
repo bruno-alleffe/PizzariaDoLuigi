@@ -1,0 +1,276 @@
+<script>
+$(function () {
+	$(".btn_cancela_form").hide()
+})
+
+
+function editar(id_produto, nome, valor, tamanho, descricao, tipo) {
+
+	$("#btn_cancela_form_"+id_produto).show()
+	$("#btn_editar_"+id_produto).hide()
+	$(".descricao_"+id_produto).hide()
+
+
+//criar um form de edição
+let form = document.createElement('form')
+form.action = '/atualizaProdutoBanco'
+form.method = 'post'
+form.enctype = 'multipart/form-data'
+form.id = 'formAtualiza'
+//form.className = 'row'
+
+//criar um label para entrada do texto
+let labelNome = document.createElement('label')
+labelNome.className = 'text-info font-weight-bold'
+labelNome.innerHTML = 'Nome do Produto:'
+
+//criar um input para entrada do texto
+let inputNome = document.createElement('input')
+inputNome.type = 'text'
+inputNome.required = 'true'
+inputNome.name = 'nome'
+inputNome.className = 'col-12 form-control mb-2'
+inputNome.value = nome
+
+//criar um label para entrada do texto
+let labelValor = document.createElement('label')
+labelValor.className = 'text-info font-weight-bold'
+labelValor.innerHTML = 'Valor:'
+
+let inputValor = document.createElement('input')
+inputValor.type = 'number'
+inputValor.step = '0.01'
+inputValor.min = '1'
+inputValor.required = 'true'
+inputValor.name = 'valor'
+inputValor.className = 'col-12 form-control mb-2'
+inputValor.value = valor
+
+
+//criar um label para entrada do texto
+let labelTamanho = document.createElement('label')
+labelTamanho.className = 'text-info font-weight-bold'
+labelTamanho.innerHTML = 'Tamanho:'
+
+//criar um input para entrada do texto
+let inputTamanho = document.createElement('input')
+inputTamanho.type = 'text'
+inputTamanho.required = 'true'
+inputTamanho.name = 'tamanho'
+inputTamanho.className = 'col-12 form-control mb-2'
+inputTamanho.value = tamanho
+
+
+// <input type="file" accept="image/*" class="custom-file-input" id="validatedCustomFile" required name="img">
+// <label class="custom-file-label" for="validatedCustomFile">Escolha uma imagem...</label>
+let divImagem = document.createElement('div')
+divImagem.className = 'custom-file col-12'
+
+let labelImagem1 = document.createElement('label')
+labelImagem1.className = 'text-info font-weight-bold'
+labelImagem1.innerHTML = 'Imagem:'
+
+let labelImagem = document.createElement('label')
+labelImagem.className = 'custom-file-label'
+labelImagem.innerHTML = 'Imagem...'
+
+let inputImagem = document.createElement('input')
+inputImagem.type = 'file'
+inputImagem.accept = 'image/*'
+inputImagem.name = 'img'
+inputImagem.className = 'custom-file-input col-12'
+
+let labelDescricao = document.createElement('label')
+labelDescricao.className = 'text-info font-weight-bold'
+labelDescricao.innerHTML = 'Descricao:'
+
+//criar um input para entrada do texto
+let inputDescricao = document.createElement('input')
+inputDescricao.type = 'text'
+inputDescricao.name = 'descricao'
+inputDescricao.className = 'col-12 form-control mb-2'
+inputDescricao.value = descricao
+
+
+//criar um input hidden para guardar o id da tarefa
+let inputId = document.createElement('input')
+inputId.type = 'hidden'
+inputId.name = 'id_produto'
+inputId.value = id_produto
+
+let inputTipo = document.createElement('input')
+inputTipo.type = 'hidden'
+inputTipo.name = 'tipo'
+inputTipo.value = tipo
+
+
+//criar um button para envio do form
+let button = document.createElement('button')
+button.type = 'submit'
+button.className = 'col-12 btn btn-info w-100 mt-3'
+button.innerHTML = 'Atualizar'
+
+//incluir inputNome no form
+form.appendChild(labelNome)
+form.appendChild(inputNome)
+
+//incluir inputNome no form
+form.appendChild(labelValor)
+form.appendChild(inputValor)
+
+//incluir inputNome no form
+form.appendChild(labelTamanho)
+form.appendChild(inputTamanho)
+
+//incluir inputDescicao no form
+form.appendChild(labelDescricao)
+form.appendChild(inputDescricao)
+
+//incluir inputNome no form
+divImagem.appendChild(inputImagem)
+divImagem.appendChild(labelImagem)
+form.appendChild(labelImagem1)
+form.appendChild(divImagem)
+
+
+
+//incluir inputId no form
+form.appendChild(inputId)
+form.appendChild(inputTipo)
+
+//incluir button no form
+form.appendChild(button)
+
+
+//teste
+//console.log(form)
+
+// //selecionar a div tarefa
+let div = document.getElementById('atualizar_'+id_produto)
+//console.log(div);
+
+
+// //limpar o texto da tarefa para inclusão do form
+div.innerHTML = ''
+
+// //incluir form na página
+div.insertBefore(form, div[0])
+
+
+
+}
+function cancelaFormAtualizar(id_produto) {
+	let div = document.getElementById('atualizar_'+id_produto)
+	div.innerHTML = ''
+	$("#btn_cancela_form_"+id_produto).hide()
+	$("#btn_editar_"+id_produto).show()
+	$(".descricao_"+id_produto).show()
+}
+
+
+</script>
+
+<!--Sessao Bebidas -->
+<div class="container imgPizzas">
+
+	<div class="bg-info shadow mb-4 d-flex" style="height: 50px;">
+		<h3 class="text-white m-auto">Bebidas</h3>
+	</div>
+
+	<div class="row">
+		
+		<?php foreach($this->view->bebidas as $id_bebida => $bebida) { ?>
+			<div class="col-md-3 mb-4 mt-4 border-bottom pb-5 divProduto">
+				<div class="row">
+					<div class="col-md-12 d-flex">
+						<img class="m-auto" src="img/imgProdutos/<?=$bebida['id_produto'].'/'.$bebida['img']?>">	
+					</div>
+					<div class="col-md-12 mt-3 ml-2 mb-2">
+						<h6 class="text-dark font-weight-bold text-monospace mb-1"><?=$bebida['nome']?></h6>
+						<h6 class="text-secondary font-weight-bold text-monospace mb-1"><?=$bebida['tamanho']?></h6>
+						<h6 class="text-dark font-weight-bold text-monospace">R$ <?=number_format($bebida['valor'], 2, ',', '')?></h6>	
+					</div>
+					
+					<div class="col-md-12 d-fle" id="atualizar_<?=$bebida['id_produto']?>">
+							
+						
+					
+					</div>
+					<div class="col-md-12 d-flex">
+					<button id="btn_editar_<?=$bebida['id_produto']?>" class="btn btn-danger col-12 w-100" type="button" onclick="editar(<?=$bebida['id_produto']?>, '<?=$bebida['nome']?>', <?=$bebida['valor']?>, '<?=$bebida['tamanho']?>', '<?=$bebida['descricao']?>', '<?=$bebida['tipo']?>' )">Editar</button>
+					<button id="btn_cancela_form_<?=$bebida['id_produto']?>" class="btn btn-danger col-12 w-100 mt-2 btn_cancela_form" type="button" onclick="cancelaFormAtualizar(<?=$bebida['id_produto']?>)">Cancelar</button>
+					
+					</div>
+					
+					
+				</div>
+			</div>
+		<?php } ?>
+
+	</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+	<div class="modal-header">
+		<h4 class="modal-title" id="exampleModalLongTitle">Tem certeza que deseja excluir esse produto ?</h4>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div id="registro" class="modal-body text-danger">
+		Cuidado! Esse produto será removido permanentemente!
+	</div>
+	
+	<div class="modal-footer">
+		<form  action="/removeProdutoBanco" method="post" class="">
+			<input id="id_pizza" type="hidden" name="id_produto">
+			<input id="nome_pizza" type="hidden" name="nome">
+			<input id="tipo_pizza" type="hidden" name="tipo" >
+			<div class="row">
+				<button type="submit" class="btn btn-info col-5">Sim</button>
+				<div class="col-2"></div>
+				<button type="button" class="btn btn-danger col-5" data-dismiss="modal">Cancelar</button>
+			</div>
+			
+		</form>
+	</div>
+	</div>
+</div>
+</div><!-- Fim do Modal  -->
+
+<!-- Modal Sucesso -->
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title text-success" id="exampleModalLongTitle"></h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		
+		<div class="row">
+			<div class="col-1"></div>
+			<div id="registro" class="modal-body text-success col-11">
+				<h4> Produto Atualizado com Sucesso!</h4>
+			</div>
+		</div>
+
+		<div class="modal-footer">
+		</div>
+	</div>
+</div>
+</div><!-- Fim do Modal  -->
+
+<script>
+
+	$(window).on("load", function(){
+		msgProdutoAtualizado(location.search.slice(1));
+	});
+	
+
+</script>

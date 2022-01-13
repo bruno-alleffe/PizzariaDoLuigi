@@ -1,0 +1,133 @@
+<script>
+
+	$(window).on("load", function(){
+
+	var query =location.search.slice(1)
+	var partes = query.split('&');
+	var data = {};
+	partes.forEach(function (parte) {
+		var chaveValor = parte.split('=');
+		var chave = chaveValor[0];
+		var valor = chaveValor[1];
+		data[chave] = valor;
+	});
+
+	
+
+	if (data['usuario'] == 'adicionado') {
+		console.log('entrou aqui');
+		$('#usuarioAdicionadoSucesso').modal('show');
+
+		setTimeout( function mudarURL2() {
+		//window.location = '/removerProdutoPizza?produto=#/'
+		window.location.replace('/adicionarUsuario');
+		}, 1500)
+
+		
+	}
+
+});
+	
+
+</script>
+
+<!--Inicio Sessão Adicionar Produto -->
+<div class="container cardápio telaAddProduto">
+	<div class="row">
+		<div class="col-md-1"></div>
+		
+		<div class="col-md-10">
+			
+			<h3 class="text-info mb-4 telaGrande mt-3"><i class="fas fa-user-plus"></i> Adicionar Usuário</h3>
+			<h5 class="text-info mb-4 telaPequena ml-2"><i class="fas fa-user-plus"></i> Adicionar Usuário</h5>
+			
+		
+			<div class="d-flex">
+			
+				<form action="addUsuario" method="post" enctype="multipart/form-data" class="formAddProduto m-auto">
+
+					<?php if(isset($_SESSION['addProduto']) && $_SESSION['addProduto'] == 'erro') { ?>
+						<div class="d-flex">
+							<h5 class="text-danger ml-auto">Erro ao adicionar produto!</h5>
+						</div>
+					<?php } unset($_SESSION['addProduto']); ?>
+
+					<div class="custom-area">
+						<label class="text-info font-weight-bold" for="validationServer03">Nome do usuário:</label>
+						<input name="nome" type="text" class="form-control" id="validationServer03" required placeholder="Digite o nome...">
+						<div class="invalid-feedback">
+							O Nome do produto é obrigatório.
+						</div>
+					</div>
+					
+					<div class="custom-area mt-2">
+						<label class="text-info font-weight-bold" for="validationServer03">E-mail:</label>
+						<input name="email" type="email" step="0.01"  min="1" class="form-control" id="validationServer03" required placeholder="Digite e-mail...">
+						<div class="invalid-feedback">
+							O preço do produto é obrigatório.
+						</div>
+					</div>
+
+					<div class="custom-area mt-2">
+						<label class="text-info font-weight-bold" for="validationServer03">Senha:</label>
+						<input name="senha" type="text" step="0.01"  min="1" class="form-control" id="validationServer03" required placeholder="Digite a senha...">
+						<div class="invalid-feedback">
+							O preço do produto é obrigatório.
+						</div>
+					</div>
+
+					<div class="form-group mt-2 mb-3">
+						<label class="text-info font-weight-bold" for="validationServer03">Tipo de usuário:</label>
+						<select name="tipo" class="custom-select" required>
+						<option value="">Selecione um tipo</option>
+						<option value="administrador">Administrador</option>
+						<option value="cliente">Cliente</option>
+						<option value="caixa">Caixa</option>
+						<option value="garçom">Garçom</option>
+						</select>
+						<div class="invalid-feedback">Selecionar o tipo é obrigatório</div>
+					</div>
+
+				
+					<div class="mt-5">
+						<button type="submit" class="btn btn-info btn-login btn-block m-auto w-75">Adicionar</button>
+					</div>
+
+					<?php if($this->view->erroCadastro) { ?>
+
+						<small class="form-text text-danger d-flex justify-content-center">*Erro ao tentar realizar o cadastro, verifique se os campos foram preenchidos corretamente.</small>
+
+					<?php } ?>
+					
+				</form>
+				
+
+			</div>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+</div><!--Fim Sessão Adicionar Produto -->
+
+<!-- Modal Sucesso -->
+<div class="modal fade" id="usuarioAdicionadoSucesso" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title text-success" id="exampleModalLongTitle"></h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		
+		<div class="row">
+			<div class="col-1"></div>
+			<div id="registro" class="modal-body text-success col-11">
+				<h4> Usuário Adicionado Com Sucesso!</h4>
+			</div>
+		</div>
+
+		<div class="modal-footer">
+		</div>
+	</div>
+</div>
+</div><!-- Fim do Modal  -->

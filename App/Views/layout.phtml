@@ -1,0 +1,466 @@
+<?php 
+ 
+    session_start();
+
+    if (!isset($_SESSION['carrinho'])) {
+      $_SESSION['carrinho'] = array();
+      
+    }
+
+    if (!isset($_SESSION['endereco'])) {
+      $_SESSION['endereco'] = '';
+    }
+
+    if(!isset($_SESSION['autenticar'])) {
+      $_SESSION['autenticar'] = '';
+    }
+
+    $_SESSION['cart']['items'] = (!empty($_SESSION['cart']['items']) ? $_SESSION['cart']['items'] : []);
+
+    $_SESSION['pedido'] = (!empty($_SESSION['pedido']) ? $_SESSION['pedido'] : []);
+    
+
+
+    // echo '<pre>';
+    // print_r($_SESSION);
+    // echo '</pre>';
+
+    $URL_ATUAL= "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $url = str_replace('http://localhost', '', $URL_ATUAL);
+    //echo $url;
+
+    //echo '<br>';
+    $haystack = $url;
+    $needle   = '/';
+
+    $pos = strripos($haystack, $needle);
+
+    // if ($pos === false) {
+    //     echo "Sinto muito, nós não encontramos ($needle) em ($haystack)";
+    // } else {
+    //     echo "Parabéns!\n";
+    //     echo "Nós encontramos a última ($needle) em ($haystack) na posição ($pos)";
+    // }
+        
+    $urlFinal = substr($url, $pos); //posição inicial = 0, comprimento = 20
+    
+
+    // echo $urlFinal;
+
+    $_SESSION['pagina'] = $urlFinal;
+
+   
+  
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <!-- Meta tags Obrigatórias -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+   
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>	 -->
+    
+    <!-- HTML5Shiv -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!-- Estilo customizado -->
+    <link rel="stylesheet" type="text/css" href="css/estilo.css">
+    <link rel="stylesheet" type="text/css" href="css/estilo2.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/JavaScript.js"></script>
+    
+
+    <title>Pizzaria do Luigi</title>
+
+    <script>
+      $('#content').css("min-height", $(window).height() - $("#footer").height() + "px");
+    </script>
+
+  </head>
+
+	<body class="axc" style="padding-top: 120px">
+
+  <!-- Inicio Preloader -->
+  <?php if($_SESSION['pagina'] != '/pizzas' && $_SESSION['pagina'] != '/bebidas' && $_SESSION['pagina'] != '/sobremesas' && $_SESSION['pagina'] != '/finalizarPedido') { ?>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="preload" id="preloader">
+            <div class="inner">
+              <!-- HTML DA ANIMAÇÃO MUITO LOUCA DO SEU PRELOADER! -->
+              <img class="gifPizza" src="img/pizza.gif" alt="">
+              <img class="d-flex justify-content-center" src="img/loadingp.gif" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <?php } ?>
+  <!-- FIm Preloader -->
+
+
+  <header>
+  <!-- Inicio Cabecalho -->
+  <nav class=" navbar navbar-expand-md navbar-light bg-info fixed-top navbar-transparente shadow">
+    
+    <div class="container">
+        
+        <a href="/" class="navbar-brand">
+          <!-- <div id="preloader" class="c-loader"></div> -->
+          <img src="img/spotify2.svg" width="142">
+        </a>
+
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#nav-principal">
+          <i class="fas fa-bars text-white"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="nav-principal">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <div>
+                <a href="/" class="nav-link">Home</a>
+              </div>
+              
+            </li>
+            <li class="nav-item">
+              <a href="/cardapio" class="nav-link">Cardápio</a>
+            </li>
+            <li class="nav-item">
+               <a href="/acompanhar" class="nav-link">Acompanhar</a>
+            </li>
+             <li class="nav-item">
+               <a href="/inscreverse" class="nav-link">Increver-se</a>
+            </li>
+            
+            <li class="nav-item divisor"></li>
+           
+            <?php if( isset($_SESSION['login']) && $_SESSION['login'] == 'logado') { ?>
+              <li class="nav-item">
+                <a id="nome_acima_carrinho" data-toggle="modal" data-target="#sairModal" class="nav-link iconePerfil"><i class="fas fa-user mr-2"></i><?php $nome = explode(" ", $_SESSION['nome']); echo 'Olá, ' .$nome[0].' *'; ?></a>
+              </li>
+            <?php } else $_SESSION['login'] = ''; ?>
+
+            <?php if($_SESSION['login'] == '') { ?>
+                <li class="nav-item">
+                  <a id="nome_acima_carrinho" data-toggle="modal" data-target="#loginModal" class="nav-link">Entrar</a>
+                </li>
+            <?php } ?>
+          </ul>
+          <a id="carrinhoIcone" data-toggle="modal" data-target="#carrinhoModal" class="nav-link mb-1 ml-2 telaGrande carrinhoIconeGrande"><i class="fas fa-cart-plus fa-lg pt-2"><small class="pl-1">Carrinho</small><small class="amountCart shadow"> 0 </small></i></a>
+          <a id="carrinhoIcone" data-toggle="modal" data-target="#carrinhoModal" class="nav-link mb-1 ml-2 telaPequena"><i class="fas fa-cart-plus fa-2x"><h6 class="mt-1">Carrinho</h6><small class="amountCart shadow"> 0 </small></i></a>
+        </div>
+        
+    </div>
+    
+  </nav>
+  
+</header>
+<!-- Fim Cabecalho -->
+<!-- <a id="carrinhoIcone2" data-toggle="modal" data-target="#carrinhoModal" class="nav-link mb-1 ml-2 telaPequena"><i class="fas fa-cart-plus fa-2x carrinhoIcone2"><h6 class="mt-1"></h6><small class="amountCart2 shadow"> 0 </small></i></a> -->
+
+
+		<?= $this->content() ?>
+
+<footer class="d-felx" id="footer"  style="bottom:0; width:100%;">
+    <div class="container">
+      <div class="row">
+          
+        <div class="col-md-12 d-flex justify-content-center">
+          <ul class="nav justify-content-center">
+            <li class="nav-item">
+              <a class="nav-link" href="">Sobre Nós</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="">|</a></li>
+            <li class="nav-item"><a class="nav-link" href="">Politica de Privacidade</a></li>
+            <li class="nav-item"><a class="nav-link" href="">|</a></li>
+            <li class="nav-item"><a class="nav-link" href="">Entre em Contato</a></li>
+            <li class="nav-item"><a class="nav-link" href="">|</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Resdes Sociais Abaixo</a></li>
+
+          </ul>
+        </div>
+
+        <div class="col-md-12 d-flex justify-content-center mt-3 mb-2">
+          <ul class="nav ulRedesSociais justify-content-center">
+            <li>
+              <a class="redesSociais" href=""><i class="fab fa-twitter fa-2x"></i></i></a>
+            </li>
+            <li>
+              <a class="redesSociais" href=""><i class="fab fa-facebook fa-2x"></i></a>
+            </li>
+            <li>
+              <a class="redesSociais" href=""><i class="fab fa-instagram fa-2x"></i></i></a>
+            </li>
+          </ul>
+        </div>
+        
+      </div>
+
+  
+      <div class="row">
+        <div class="col-md-12">
+          <small class="mt-3 mb-2 d-flex justify-content-center">&copy; Todos os direitos reservados à Bait Systems - 2021</small>
+        </div>
+      </div>
+
+
+
+  </div>
+</footer>
+
+
+<!-- Inicio do Modal Login-->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <button  type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-title text-center">
+          <h4>Login</h4>
+        </div>
+        <div class="d-flex flex-column text-center">
+          <form action="/autenticar" method="post">
+            <div class="form-group">
+              <input type="email" class="form-control" id="email1"placeholder="Digite seu e-mail..." name="email">
+              <input type="hidden" class="form-control" name="pagina" value="<?=$urlFinal?>">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" id="password1" placeholder="Digite sua senha..." minlength="4" name="senha">
+              <?php if($_SESSION['autenticar'] == 'erro') { ?>
+                <script>
+                  $(window).on('load',function(){
+                    $('#erroLogin').modal('show');
+                  });
+                </script>
+                <!-- <span class="text text-danger">*E-mail e ou senha inválido(s)</span> -->
+              <?php } ?>
+              <?php if($_SESSION['autenticar'] == 'sucesso') { ?>
+                <script>
+                   console.log('Logado com Sucesso!');
+                  // $(window).on('load',function(){
+                  //   $('#sucessoLogin').modal('show');
+                  // });
+                </script>
+                <!-- <span class="text text-danger">*E-mail e ou senha inválido(s)</span> -->
+              <?php } $_SESSION['autenticar'] = ''; ?>
+              <p class="font-small blue-text d-flex justify-content-end mt-1"><a href="#" class="blue-text ml-1">
+              Esqueceu a senha?</a></p>
+            </div>
+            <button type="submit" class="btn btn-info btn-block btn- btn-login w-100">Login</button>
+          </form>
+          
+          <div class="text-center text-muted delimiter">ou use uma rede social</div>
+          <div class="d-flex justify-content-center social-buttons">
+            <button type="button" class="btn btn-secondary rounded-circle d-flex justify-content-center" data-toggle="tooltip" data-placement="top" title="Twitter">
+              <i class="fab fa-twitter"></i>
+            </button>
+            <button type="button" class="btn btn-secondary rounded-circle d-flex justify-content-center" data-toggle="tooltip" data-placement="top" title="Facebook">
+              <i class="fab fa-facebook"></i>
+            </button>
+            <button type="button" class="btn btn-secondary rounded-circle d-flex justify-content-center" data-toggle="tooltip" data-placement="top" title="Linkedin">
+              <i class="fab fa-linkedin"></i>
+            </button>
+          </di>
+        </div>
+      </div>
+    </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <div class="signup-section">Não está cadastrado? <a href="/inscreverse" class="text-info"> Inscreva-se</a>.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Fim do Modal Login-->
+
+
+<!-- Modal Sair-->
+<div id="sairModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div id="contentModalSair" class="modal-dialog d-flex justify-content-center">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title text-dark" id="exampleModalLabel"><i class="fas fa-user mr-3"></i><?php echo $_SESSION['nome']; ?></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="bg-dark mb-5" style="height: 1px; width: 100%;"></div>
+      <form action="/" method="post">
+        <button type="submit" class="btn btn-info btn-block ml-auto">Editar Perfil</button>
+      </form>
+      <?php if($_SESSION['tipo'] == 'administrador') { ?>
+        <form action="/administrador" method="post">
+          <button type="submit" class="btn btn-secondary btn-block ml-auto mt-2">Gerenciar Pizzaria</button>
+        </form>
+        <?php } ?>
+      <form action="/sair" method="post">
+        <input type="hidden" class="form-control" name="pagina" value="<?=$urlFinal?>">
+        <button type="submit" class="btn btn-danger btn-block ml-auto mt-2">Sair</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="modalCarrinho">
+<!-- Modal Carrinho-->
+<div id="carrinhoModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div id="contentModalCarrinho" class="modal-dialog" role="document">
+    <div id="carrinhoLargura" class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title text-dark" id="exampleModalLabel">Carrinho</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="bg-dark" style="height: 1px; width: 100%;"></div>
+  
+      <div class="modal-body carrinhoVazio">
+        <p class="text-dark font-weight-normal text-center">Seu carrinho está vazio, mas a sua barriga não precisa estar. Adicione seus itens de preferência e volte aqui para finalizar o seu pedido.</p>
+      </div>
+
+      <form class="carrinhoVazio" action="cardapio" method="post">
+        <button type="submit" class="btn btn-danger btn-block m-auto">COMEÇAR O PEDIDO</button>
+      </form>
+      <small class="text-danger m-auto pb-3 carrinhoVazio">*Comece clicando aqui</small>
+      
+     
+      <?php foreach($_SESSION['cart']["items"] as $id_p => $produto) { ?>
+          
+        <div class="container border-bottom  mt-4 pb-3 imgNomePreco imgNomePreco_<?=$produto['id_produto']?>">
+          <div class="row">
+            <div class="col-4 imgp imgp_<?=$produto['id_produto']?>">
+              <img src="img/imgProdutos/<?=$produto['id_produto']?>/<?=$produto['img']?>" alt="" width="90" height="90">
+            </div>
+            <div class="col-5">
+              <div class="row">
+
+                <div class="col-12">
+                  <h6 class="text-dark ml-auto font-weight-bold text-monospace nomeTam nomep nome_<?=$produto['id_produto']?>"></h6>
+                </div>
+
+                <div class="col-12">
+                 <h6 class="text-secondary ml-auto font-weight-bold text-monospace nomeTam tamp tam_<?=$produto['id_produto']?>"> <?=$produto['tamanho']?>"> <?=$produto['tamanho']?></h6>
+                </div>
+
+                <div class="col-6">
+                      <small class="text-dark ml-auto font-weight-bold mt-4 nomeTamQnt valp val_<?=$produto['id_produto']?>">R$ <?=number_format($produto['valor'], 2, ',', '')?></small>
+                  </div>
+
+                  <div class="col-6 ">
+                     <small class="text-dark ml-auto font-weight-bold mt-4 nomeTamQnt qnt item_<?=$produto['id_produto']?>"></small>
+                  </div>
+              </div>
+            </div> 
+         
+                
+            <div class="col-3">
+              <div class="row">
+                  
+                <div class="col-12 btnMaisDiv ">
+                  <button data-action="/add/<?=$produto['id_produto']?>" class="btn btn-success btnMais">+</button>
+                </div>
+                <div class="col-12">
+                  <button data-action="/remove/<?=$produto['id_produto']?>" class="btn btn-danger btnMenos">-</button>
+                </div>
+                
+                <!-- <div class="col-12 maisMenos maisMenos_<?=$produto['id_produto']?>">
+                  
+                </div> -->
+              </div>
+            </div>
+         </div>
+              
+        </div>
+          
+        
+      <?php } ?>
+      
+      <?php if (count($_SESSION['cart']['items']) > 0) { ?>
+        <div class="precoFinalizar">
+          <div class="bg-dark mt-3" style="height: 1px; width: 100%;"></div>
+          <div class="container mt-2 finalizarPedido">
+            <div class="row">
+              <div class="col-md-6">
+              <h5 class="text-dark font-weight-bold text-monospace mt-4 cart_total"><?=number_format($produto['total'], 2, ',', '')?></h5>
+              </div>
+              <div class="col-md-6">
+                <a href="finalizarPedido" class="btn btn-info mt-2">Finalizar Pedido</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <?php } ?>
+    
+      
+      
+    
+     
+    </div>
+  </div>
+</div> 
+<!-- Fim Modal Carrinho -->
+</div>
+
+
+<!-- Modal Login Erro -->
+<div id="erroLogin" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">OPS!</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body  text-danger">
+        Login ou senha inválidos. Tente novamente!
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Login Sucesso
+<div id="sucessoLogin" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Sucesso!</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-success">
+        Login feito com sucesso!
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+
+	<!-- JavaScript (Opcional) -->
+    <!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  
+  
+  </body>
+
+</html>

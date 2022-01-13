@@ -1,0 +1,105 @@
+<script>
+
+$(function () {
+	$("#carrinhoIcone").hide()
+})
+
+function enviarFormPagamento() {
+ $('.formPagamento').submit()
+}
+
+
+// function sessionAmount() { 
+
+// 	document.location.reload(true);
+// }
+
+$(function () {
+
+	$.post("/cart", function(cart) {
+    	ajaxCart(cart);
+  	}, "json");
+
+
+	function ajaxCart(cart) {
+		
+		if(cart.amount == 0) {
+			window.location = '/cardapio'
+		}
+		
+	}
+})
+
+
+</script>
+
+
+<div class="container">
+		
+		
+	<div class="row">
+		
+		<div class="col-12 d-flex">
+			<h3 class="text-secondary m-auto text-center">Escolha a forma de pagamento</h3>
+		</div>
+
+		<div class="col-12 d-flex mt-5 mb-5">
+
+			<form action="/finalizarCompra" class="m-auto formPagamento" method="post">
+				<input type="hidden" name="pagamento" value="ok">
+
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+					<label class="form-check-label" for="exampleRadios1">
+						Cartão de Crédito
+					</label>
+				</div>
+
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+					<label class="form-check-label" for="exampleRadios1">
+						Boleto
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+					<label class="form-check-label" for="exampleRadios1">
+						Débito Online
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+					<label class="form-check-label" for="exampleRadios1">
+						Pix
+					</label>
+				</div>
+				
+			</form>
+	
+		</div>
+
+		
+		<div class="col-12 paginaPagamento">
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-3 d-flex mt-3">
+					<a href="/finalizarPedido" class="btn btn-danger m-auto">Cancelar</a>
+				</div>
+				<div class="col-md-3 d-flex mt-3">
+					<button onclick="enviarFormPagamento()" class="btn btn-success m-auto">Comprar</button>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			
+		</div>
+		
+		
+
+		
+		
+
+		
+	
+	</div><!-- Fim Row -->
+</div> <!-- Fim Conteiner -->
+

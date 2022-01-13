@@ -1,0 +1,48 @@
+<!--Inicio Cardápio -->
+<div class="container cardápio">
+	<div class="row">
+		<div class="col-md-1"></div>
+		
+		<div class="col-md-10">
+			
+			<h5 class="text-info mb-4 telaGrande mt-3">Este é o nosso cardápio. Clique em uma das sessões para começar adicionar produtos no seu carrinho!</h5>
+			<h6 class="text-info mb-4 telaPequena">Este é o nosso cardápio. Clique em uma das sessões para começar adicionar produtos no seu carrinho!</h6>
+      		<div class="d-flex justify-content-center" onclick="locationPizzas()" style="cursor: pointer">
+				<div class="card cardImgTexto">
+				<div class="card-body" onmouseleave="$('.h3Cardapio1').css('color', '#17a2b7');" onmouseenter="$('.h3Cardapio1').css('color', 'white');">
+					<a href="/pizzas">
+						<img class="d-flex justify-content-center" src="img/pizzas.png">
+						<h3 class="h3Cardapio1">Pizzas</h3>
+				  	</a>
+				</div>
+				</div>
+			</div>
+
+			<div class="d-flex justify-content-center" onclick="locationBebidas()" style="cursor: pointer">
+				<div class="card cardImgTexto">
+				<div class="card-body" onmouseleave="$('.h3Cardapio2').css('color', '#17a2b7');" onmouseenter="$('.h3Cardapio2').css('color', 'white');">
+					<a href="/bebidas">
+						<img class="d-flex justify-content-center" src="img/bebidas.png">
+						<h3 class="h3Cardapio2">Bebidas</h3>
+				  	</a>
+				</div>
+				</div>
+			</div>
+
+			<div class="d-flex justify-content-center" onclick="locationSobremesas()" style="cursor: pointer">
+				<div class="card cardImgTexto">
+				<div class="card-body"  onmouseleave="$('.h3Cardapio3').css('color', '#17a2b7');" onmouseenter="$('.h3Cardapio3').css('color', 'white');">
+					<a href="/sobremesas">
+						<img class="d-flex justify-content-center" src="img/sobremesas.png">
+						<h3 class="h3Cardapio3">Sobremesas</h3>
+				  	</a>
+				</div>
+				</div>
+			</div>
+
+			
+
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+</div><!--Fim Cardápio -->
